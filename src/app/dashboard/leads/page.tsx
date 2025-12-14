@@ -83,11 +83,12 @@ export default function LeadsPage() {
                 <th className="text-left p-4 text-[var(--muted)] text-sm hidden sm:table-cell">Source</th>
                 <th className="text-left p-4 text-[var(--muted)] text-sm">Status</th>
                 <th className="text-left p-4 text-[var(--muted)] text-sm hidden md:table-cell">Value</th>
+                <th className="text-left p-4 text-[var(--muted)] text-sm">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((lead) => (
-                <tr key={lead.id} className="border-b border-[var(--border)] hover:bg-[var(--card-hover)] cursor-pointer">
+                <tr key={lead.id} className="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
                   <td className="p-4">
                     <div className="font-medium text-white">{lead.name}</div>
                     {lead.company && <div className="text-sm text-[var(--muted)]">{lead.company}</div>}
@@ -97,6 +98,18 @@ export default function LeadsPage() {
                     <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${statusColors[lead.status] || 'bg-gray-500/20 text-gray-400'}`}>{lead.status}</span>
                   </td>
                   <td className="p-4 hidden md:table-cell text-white">{lead.estimated_value ? `${currentBusiness?.currency} ${lead.estimated_value.toLocaleString()}` : '-'}</td>
+                  <td className="p-4">
+                    {lead.status !== 'converted' && lead.status !== 'won' ? (
+                      <Link
+                        href={`/dashboard/clients/new?from_lead=${lead.id}`}
+                        className="text-sm text-green-500 hover:text-green-400"
+                      >
+                        Convert
+                      </Link>
+                    ) : (
+                      <span className="text-sm text-[var(--muted)]">Converted</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
