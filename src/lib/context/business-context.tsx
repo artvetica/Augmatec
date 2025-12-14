@@ -53,9 +53,9 @@ export function BusinessProvider({ children }: { children: ReactNode }) {
     // Check if super admin
     const { data: superAdmin } = await supabase
       .from('super_admins')
-      .select('id')
+      .select('user_id')
       .eq('user_id', user.id)
-      .single()
+      .maybeSingle()
     
     setIsSuperAdmin(!!superAdmin)
 
