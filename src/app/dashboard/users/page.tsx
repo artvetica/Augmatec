@@ -23,7 +23,7 @@ interface SuperAdmin {
   users: {
     id: string
     email: string
-  }
+  } | null
 }
 
 export default function UsersPage() {
@@ -133,11 +133,11 @@ export default function UsersPage() {
             Super Admins have complete access to all businesses and system settings
           </div>
           <div className="space-y-2">
-            {superAdmins.map((sa) => (
+            {superAdmins.filter(sa => sa.users).map((sa) => (
               <div key={sa.user_id} className="flex items-center gap-3 p-3 bg-[var(--card)] border border-[var(--border)] rounded-lg">
                 <Shield size={16} className="text-red-500" />
                 <div className="flex-1">
-                  <div className="text-white font-medium">{sa.users.email}</div>
+                  <div className="text-white font-medium">{sa.users?.email}</div>
                   <div className="text-xs text-[var(--muted)] font-mono">{sa.user_id}</div>
                 </div>
               </div>
