@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useBusiness } from '@/lib/context/business-context'
-import { LayoutDashboard, Users, Building2, FolderKanban, CheckSquare, Wallet, BarChart3, Settings, LogOut, Menu, X, ChevronDown, Plus, Shield } from 'lucide-react'
+import { LayoutDashboard, Users, Building2, FolderKanban, CheckSquare, Wallet, BarChart3, Settings, LogOut, Menu, X, ChevronDown, Plus, Shield, UserCog } from 'lucide-react'
 import { useState } from 'react'
 
 const navigation = [
@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Projects', href: '/dashboard/projects', icon: FolderKanban },
   { name: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare },
   { name: 'Finance', href: '/dashboard/finance', icon: Wallet },
+  { name: 'Users', href: '/dashboard/users', icon: UserCog },
   { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
