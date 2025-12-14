@@ -67,7 +67,7 @@ export default function UsersPage() {
           // Try to get user data - in production you'd use an RPC function
           return {
             ...bu,
-            email: bu.user_id === currentUser?.id ? currentUser.email : bu.user_id,
+            email: bu.user_id === currentUser?.id ? (currentUser?.email || bu.user_id) : bu.user_id,
           }
         })
       )
