@@ -57,7 +57,7 @@ export default function UsersPage() {
         .select('user_id, users(id, email)')
 
       setBusinessUsers(bizUsers || [])
-      setSuperAdmins(superAdminsData || [])
+      setSuperAdmins((superAdminsData as any) || [])
     } catch (error) {
       console.error('Error fetching users:', error)
     } finally {
