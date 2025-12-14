@@ -99,16 +99,22 @@ export default function LeadsPage() {
                   </td>
                   <td className="p-4 hidden md:table-cell text-white">{lead.estimated_value ? `${currentBusiness?.currency} ${lead.estimated_value.toLocaleString()}` : '-'}</td>
                   <td className="p-4">
-                    {lead.status !== 'converted' && lead.status !== 'won' ? (
+                    <div className="flex items-center gap-2">
                       <Link
-                        href={`/dashboard/clients/new?from_lead=${lead.id}`}
-                        className="text-sm text-green-500 hover:text-green-400"
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="text-sm text-blue-500 hover:text-blue-400"
                       >
-                        Convert
+                        View
                       </Link>
-                    ) : (
-                      <span className="text-sm text-[var(--muted)]">Converted</span>
-                    )}
+                      {lead.status !== 'converted' && lead.status !== 'won' && (
+                        <Link
+                          href={`/dashboard/clients/new?from_lead=${lead.id}`}
+                          className="text-sm text-green-500 hover:text-green-400"
+                        >
+                          Convert
+                        </Link>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

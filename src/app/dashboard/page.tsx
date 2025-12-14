@@ -1,17 +1,46 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useBusiness } from '@/lib/context/business-context'
+import { createClient } from '@/lib/supabase/client'
 import { Users, Building2, Wallet, CheckSquare, Plus } from 'lucide-react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
-  const { currentBusiness, isSuperAdmin } = useBusiness()
+  const { currentBusiness } = useBusiness()
+  const [stats, setStats] = useState({
+    leads: 0,
+    clients: 0,
+    revenue: 0,
+    tasks: 0,
+  })
+  const supabase = createClient()
 
-  const stats = [
-    { name: 'Leads', value: '0', change: '0 new', icon: Users, href: '/dashboard/leads' },
-    { name: 'Clients', value: '0', change: 'active', icon: Building2, href: '/dashboard/clients' },
-    { name: 'Revenue', value: `${currentBusiness?.currency || 'PKR'} 0`, change: 'this month', icon: Wallet, href: '/dashboard/finance' },
-    { name: 'Tasks', value: '0', change: 'pending', icon: CheckSquare, href: '/dashboard/tasks' },
+  useEffect(() => {
+    if (currentBusiness) fetchStats()
+  }, [currentBusiness])
+
+  async function fetchStats() {
+    const [leads, clients, invoices, tasks] = await Promise.all([
+      supabase.from('leads').select('id', { count: 'exact', head: true }).eq('business_id', currentBusiness?.id),
+      supabase.from('clients').select('id', { count: 'exact', head: true }).eq('business_id', currentBusiness?.id),
+      supabase.from('invoices').select('amount').eq('business_id', currentBusiness?.id).eq('status', 'paid'),
+      supabase.from('tasks').select('id', { count: 'exact', head: true }).eq('business_id', currentBusiness?.id).neq('status', 'completed'),
+    ])
+
+    setStats({
+      leads: leads.count || 0,
+      clients: clients.count || 0,
+      revenue: invoices.data?.reduce((sum, inv) => sum + inv.amount, 0) || 0,
+      tasks: tasks.count || 0,
+    })
+  }
+
+  const statCards = [
+    { name: 'Leads', value: stats.leads.toString(), change: 'total', icon: Users, href: '/dashboard/leads' },
+    { name: 'Clients', value: stats.clients.toString(), change: 'active', icon: Building2, href: '/dashboard/clients' },
+    { name: 'Revenue', value: `${currentBusiness?.currency || 'PKR'} ${stats.revenue.toLocaleString()}`, change: 'total paid', icon: Wallet, href: '/dashboard/finance' },
+    { name: 'Tasks', value: stats.tasks.toString(), change: 'pending', icon: CheckSquare, href: '/dashboard/tasks' },
   ]
 
   return (
@@ -22,7 +51,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat) => (
+        {statCards.map((stat) => (
           <Link key={stat.name} href={stat.href} className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-5 hover:bg-[var(--card-hover)]">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[var(--muted)] text-sm">{stat.name}</span>
