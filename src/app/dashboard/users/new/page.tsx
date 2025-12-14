@@ -69,13 +69,14 @@ export default function NewUserPage() {
   }
 
   function togglePermission(module: string, action: string) {
+    const currentPerms = formData.permissions[module as keyof typeof formData.permissions] as any
     setFormData({
       ...formData,
       permissions: {
         ...formData.permissions,
         [module]: {
-          ...formData.permissions[module as keyof typeof formData.permissions],
-          [action]: !formData.permissions[module as keyof typeof formData.permissions][action as keyof typeof formData.permissions.leads],
+          ...currentPerms,
+          [action]: !currentPerms?.[action],
         },
       },
     })
