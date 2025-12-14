@@ -82,7 +82,7 @@ export default function UsersPage() {
   }
 
   const filteredUsers = businessUsers.filter(user => {
-    const matchesSearch = user.users.email.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = (user.email || user.user_id).toLowerCase().includes(searchQuery.toLowerCase())
     const matchesRole = roleFilter === 'all' || user.role === roleFilter
     return matchesSearch && matchesRole
   })
