@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useBusiness } from '@/lib/context/business-context'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
 
-export default function NewTaskPage() {
+function NewTaskForm() {
   const [projects, setProjects] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: '',
@@ -176,5 +176,13 @@ export default function NewTaskPage() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function NewTaskPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-[var(--muted)]">Loading...</div></div>}>
+      <NewTaskForm />
+    </Suspense>
   )
 }

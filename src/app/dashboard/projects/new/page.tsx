@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useBusiness } from '@/lib/context/business-context'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
 
-export default function NewProjectPage() {
+function NewProjectForm() {
   const [clients, setClients] = useState<any[]>([])
   const [formData, setFormData] = useState({
     name: '',
@@ -196,5 +196,13 @@ export default function NewProjectPage() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function NewProjectPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-[var(--muted)]">Loading...</div></div>}>
+      <NewProjectForm />
+    </Suspense>
   )
 }
